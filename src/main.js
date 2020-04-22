@@ -12,6 +12,10 @@ import { faBlackTie } from "@fortawesome/free-brands-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
+import { faSave } from "@fortawesome/free-regular-svg-icons";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faTrashAlt);
 library.add(faEdit);
@@ -19,6 +23,10 @@ library.add(faBlackTie);
 library.add(faBars);
 library.add(faSearch);
 library.add(faChevronDown);
+library.add(faSpinner);
+library.add(faExclamationTriangle);
+library.add(faSave);
+library.add(faUserPlus);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
