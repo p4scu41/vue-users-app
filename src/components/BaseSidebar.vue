@@ -21,7 +21,7 @@
       <ul>
         <li class="py-2 md:my-0 hover:bg-purple-100 lg:hover:bg-transparent">
           <router-link
-            to="/"
+            :to="{ name: 'home' }"
             class="block pl-4 align-middle text-gray-700 hover:text-purple-500 border-l-4 border-transparent lg:hover:border-purple-400"
             active-class="lg:border-purple-500 text-gray-900 font-bold"
             exact
@@ -31,7 +31,7 @@
         </li>
         <li class="py-2 md:my-0 hover:bg-purple-100 lg:hover:bg-transparent">
           <router-link
-            to="/about"
+            :to="{ name: 'about' }"
             class="block pl-4 align-middle text-gray-700 hover:text-purple-500 border-l-4 border-transparent lg:hover:border-purple-400"
             active-class="lg:border-purple-500 text-gray-900 font-bold"
             exact

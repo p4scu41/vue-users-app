@@ -1,32 +1,76 @@
 <template>
   <t-modal
     ref="modal"
-    @closed="onProgress(false)"
+    @closed="onClosed"
     footerClass="px-6 py-3 border-t flex justify-center"
   >
-    <form class="w-full max-w-lg">
-      <div class="flex flex-wrap">
-        <div class="w-full px-3">
-          <label class="block text-gray-700 font-bold mb-2" for="name">
-            Name
-          </label>
+    <form class="form-full">
+      <div class="form-full-container">
+        <div class="form-group">
+          <label for="name">Name</label>
           <input
-            class="block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 mb-3 focus:outline-none focus:bg-white focus:border-gray-500"
             id="name"
             type="text"
             v-model="user.name"
+            :class="{
+              valid: !hasError('name'),
+              invalid: hasError('name')
+            }"
           />
+          <div v-if="hasError('name')" class="invalid-feedback">
+            {{ getError("name") }}
+          </div>
         </div>
-        <div class="w-full px-3">
-          <label class="block text-gray-700 font-bold mb-2" for="email">
-            E-mail
-          </label>
+        <div class="form-group">
+          <label for="email">E-mail</label>
           <input
-            class="block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 mb-3 focus:outline-none focus:bg-white focus:border-gray-500"
             id="email"
             type="email"
             v-model="user.email"
+            :class="{
+              valid: !hasError('email'),
+              invalid: hasError('email')
+            }"
           />
+          <div v-if="hasError('email')" class="invalid-feedback">
+            {{ getError("email") }}
+          </div>
+        </div>
+        <div class="form-group" v-if="createMode">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            v-model="user.password"
+            :class="{
+              valid: !hasError('password'),
+              invalid: hasError('password')
+            }"
+          />
+          <div v-if="hasError('password')" class="invalid-feedback">
+            {{ getError("password") }}
+          </div>
+        </div>
+        <div class="form-group" v-if="createMode">
+          <label for="password_confirmation">Password Confirmation</label>
+          <input
+            id="password_confirmation"
+            type="password"
+            v-model="user.password_confirmation"
+            :class="{
+              valid: !hasError('password_confirmation'),
+              invalid: hasError('password_confirmation')
+            }"
+          />
+          <div
+            v-if="hasError('password_confirmation')"
+            class="invalid-feedback"
+          >
+            {{ getError("password_confirmation") }}
+          </div>
+        </div>
+        <div v-if="feedback.message" class="alert-danger">
+          {{ feedback.message }}
         </div>
       </div>
     </form>
@@ -69,9 +113,33 @@ export default {
   props: {
     user: {
       type: Object
+    },
+    feedback: null
+  },
+  computed: {
+    createMode() {
+      return typeof this.user.id == "undefined";
     }
   },
   methods: {
+    hasError(field) {
+      if (typeof this.feedback.errors == "undefined") {
+        return false;
+      }
+
+      if (typeof this.feedback.errors[field] == "undefined") {
+        return false;
+      }
+
+      return this.feedback.errors[field].length > 0;
+    },
+    getError(field) {
+      return this.feedback.errors[field][0];
+    },
+    onClosed() {
+      this.onProgress(false);
+      this.$emit("closed");
+    },
     onProgress(value) {
       this.progressing = value;
     },
