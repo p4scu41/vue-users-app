@@ -4,7 +4,7 @@
     @closed="onClosed"
     footerClass="px-6 py-3 border-t flex justify-center"
   >
-    <form class="form-full">
+    <form class="form-full" @submit.prevent="saved">
       <div class="form-full-container">
         <div class="form-group">
           <label for="name">Name</label>
@@ -81,8 +81,9 @@
       </button>
 
       <button
+        type="submit"
         title="Save"
-        @click="saved()"
+        @click="saved"
         class="btn-option"
         :disabled="progressing"
       >

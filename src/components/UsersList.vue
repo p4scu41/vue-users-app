@@ -92,7 +92,7 @@
 <script>
 import UsersConfirmDelete from "@/components/UsersConfirmDelete.vue";
 import UsersForm from "@/components/UsersForm.vue";
-import UsersService from "@/services/UsersService.js";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -104,19 +104,17 @@ export default {
       deleteId: 0,
       userEdit: {},
       filter: "",
-      pagination: {
-        totalItems: 100,
-        perPage: 10,
-        limit: 5,
-        currentPage: 1
-      },
-      users: [],
-      loadingUsers: false,
       feedback: {
         message: false,
         errors: []
       }
     };
+  },
+  computed: {
+    ...mapState("user", ["users", "pagination"]),
+    ...mapState("user", {
+      loadingUsers: state => state.loading
+    })
   },
   methods: {
     confirmRemove(userId) {
@@ -124,7 +122,7 @@ export default {
       this.$refs.modalConfirmDelete.show();
     },
     remove(userId) {
-      UsersService.deleteUser(userId).then(() => {
+      this.$store.dispatch("user/deleteUser", userId).then(() => {
         this.$refs.modalConfirmDelete.hide();
         this.getUsers();
       });
@@ -146,9 +144,9 @@ export default {
       this.resetFeedback();
 
       if (typeof user.id != "undefined") {
-        request = UsersService.updateUser(user);
+        request = this.$store.dispatch("user/updateUser", user);
       } else {
-        request = UsersService.createUser(user);
+        request = this.$store.dispatch("user/createUser", user);
       }
 
       request
@@ -170,18 +168,10 @@ export default {
         });
     },
     getUsers() {
-      this.loadingUsers = true;
-
-      UsersService.getUsers(this.pagination.currentPage, this.filter).then(
-        response => {
-          this.users = response.data.data;
-
-          this.pagination.totalItems = response.data.meta.total;
-          this.pagination.perPage = response.data.meta.per_page;
-          this.pagination.currentPage = response.data.meta.current_page;
-
-          this.loadingUsers = false;
-        }
+      this.$store.dispatch(
+        "user/getUsers",
+        this.pagination.currentPage,
+        this.filter
       );
     }
   },
